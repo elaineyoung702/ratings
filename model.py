@@ -23,6 +23,10 @@ class User(db.Model):
     age = db.Column(db.Integer, nullable=True)
     zipcode = db.Column(db.String(15), nullable=True)
 
+    def __repr__(self):
+        """Show details about user."""
+        return f"<User user_id={self.user_id} email={self.email}>"
+
 
 class Movie(db.Model):
     """Movie on movies website."""
