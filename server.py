@@ -2,10 +2,10 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask
+from flask import (Flask, render_template, request, redirect, flash, session)
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db
+from model import connect_to_db, db, User, Movie, Rating
 
 
 app = Flask(__name__)
@@ -22,7 +22,62 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/')
 def index():
     """Homepage."""
-    return "<html><body>Placeholder for the homepage.</body></html>"
+
+    return render_template("homepage.html")
+
+
+@app.route('/users')
+def show_users():
+    """List all users."""
+
+    users = User.query.all()
+
+    return render_template("user_list.html", users=users)
+
+
+@app.route('/register', methods=["GET"])
+def register_form():
+    """Show registration form."""
+
+    return render_template("register_form.html")
+
+
+@app.route('/register', methods=["POST"])
+def register_process():
+    """Process registration form submission."""
+
+    # get email and password from registration form
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    # if user does not exist in db, create
+    if (email,) not in db.session.query(User.email).all():
+        user_record = User(email=email, password=password)
+        db.session.add(user_record)
+        db.session.commit()
+
+    else:
+        # add login info to session so we know they're logged in
+        user_check = db.session.query(User).filter(User.email==email).one()
+
+    if password == user_check.password:
+        session['user_email'] = email
+        session['user_password'] = password
+
+        flash('Login successful!')
+
+        return redirect("/")
+    else:
+        flash('Incorrect email or password.')
+
+    
+@app.route('/logout')
+def log_out():
+    # session.clear()
+    del session['user_email']
+    del session['user_password']
+
+    return redirect("/")
 
 
 if __name__ == "__main__":

@@ -38,8 +38,6 @@ class Movie(db.Model):
     released_at = db.Column(db.DateTime)
     imdb_url = db.Column(db.String(500))
 
-    ratings = db.relationship("Rating")
-
 
     def __repr__(self):
         """Provide info about movie."""
@@ -57,9 +55,9 @@ class Rating(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     score = db.Column(db.Integer, nullable=False)
 
-    movie = db.relationship("Movie")
+    movie = db.relationship("Movie", backref="ratings")
     user = db.relationship("User", backref="ratings")
-    
+
 
     def __repr__(self):
         """Provide helpful representation when printed."""
