@@ -66,15 +66,16 @@ def register_process():
         db.session.commit()
 
     # add login info to session so we know they're logged in
-    user_check = db.session.query(User).filter(User.email==email).one()
+    user_obj = db.session.query(User).filter(User.email==email).one()
 
-    if password == user_check.password:
+    if password == user_obj.password:
         session['user_email'] = email
         session['user_password'] = password
+        session['user_id'] = user_obj.user_id
 
         flash('Login successful!')
 
-        return redirect(f"/users/{user_check.user_id}")
+        return redirect(f"/users/{user_obj.user_id}")
     else:
         flash('Incorrect email or password.')
 
@@ -84,6 +85,7 @@ def log_out():
     # session.clear()
     del session['user_email']
     del session['user_password']
+    del session['user_id']
 
     return redirect("/")
 
@@ -103,6 +105,21 @@ def show_movie_page(movie_id):
     movie = Movie.query.get(movie_id)
 
     return render_template('movie_page.html', movie=movie)
+
+
+@app.route('/rate-movie', methods=['POST'])
+def rate_movie():
+    """Add rating to ratings table."""
+
+    user_id = session['user_id']
+    score = request.form.get("movie_rating")
+    movie_id = request.form.get("movie_id")
+
+    rating_record = Rating(movie_id=movie_id, user_id=user_id, score=score)
+    db.session.add(rating_record)
+    db.session.commit()
+
+    flash('Rated successfully!')
 
 
 if __name__ == "__main__":
