@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Register/Log In</h2>
+
+<form action='/register' method='POST'>
+    <label>Email Address: <input type="email" name="email" required></label>
+    <br>
+    <label>Password: <input type="password" name="password" required></label>
+    <br>
+    <input type='submit' value="Register/Log In">
+</form>
+
+
+
+{% endblock %}

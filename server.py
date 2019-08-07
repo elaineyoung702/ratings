@@ -35,6 +35,15 @@ def show_users():
     return render_template("user_list.html", users=users)
 
 
+@app.route('/users/<user_id>')
+def show_user_page(user_id):
+    """Show user's page."""
+
+    user = User.query.get(user_id)
+
+    return render_template('user_page.html', user=user)
+
+
 @app.route('/register', methods=["GET"])
 def register_form():
     """Show registration form."""
@@ -77,6 +86,7 @@ def log_out():
     del session['user_password']
 
     return redirect("/")
+
 
 
 if __name__ == "__main__":
