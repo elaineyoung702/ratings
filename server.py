@@ -30,7 +30,7 @@ def index():
 def show_users():
     """List all users."""
 
-    users = User.query.all()
+    users = User.query.order_by(User.user_id.desc()).all()
 
     return render_template("user_list.html", users=users)
 
@@ -56,9 +56,8 @@ def register_process():
         db.session.add(user_record)
         db.session.commit()
 
-    else:
-        # add login info to session so we know they're logged in
-        user_check = db.session.query(User).filter(User.email==email).one()
+    # add login info to session so we know they're logged in
+    user_check = db.session.query(User).filter(User.email==email).one()
 
     if password == user_check.password:
         session['user_email'] = email
