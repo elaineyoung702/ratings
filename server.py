@@ -74,7 +74,7 @@ def register_process():
 
         flash('Login successful!')
 
-        return redirect("/")
+        return redirect(f"/users/{user_check.user_id}")
     else:
         flash('Incorrect email or password.')
 
