@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+Movie Title: {{movie.title}}<br>
+Release Date: {{movie.released_at.strftime('%Y-%m-%d')}}<br>
+<a href="{{movie.imdb_url}}">IMDB Link</a><br>
+<br>
+<!-- Work in progress to check if user has rated movie yet -->
+<!-- {% if 'user_email' in session %} -->
+    <form action="/rate-movie" method="POST">
+        <label>Rate this film out of 5:
+            <select name="movie_rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </label>
+        <input type="hidden" name="movie_id" value={{movie.movie_id}}>
+        <input type="submit">
+    </form>
+<!-- {% endif %} -->
+
+<br>
+<br>
+Ratings:
+<ul>
+    {% for rating in movie.ratings %}
+        <li>User {{rating.user.user_id}}: Score of {{rating.score}}/5
+    {% endfor %}
+</ul>
+
+{% endblock %}
