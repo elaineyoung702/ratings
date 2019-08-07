@@ -96,6 +96,14 @@ def show_movie_list():
     return render_template('movie_list.html', movies=movies)
 
 
+@app.route('/movies/<movie_id>')
+def show_movie_page(movie_id):
+    """Show user's page."""
+
+    movie = Movie.query.get(movie_id)
+
+    return render_template('movie_page.html', movie=movie)
+
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
