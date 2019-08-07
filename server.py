@@ -88,6 +88,14 @@ def log_out():
     return redirect("/")
 
 
+@app.route('/movies')
+def show_movie_list():
+
+    movies = Movie.query.all()
+
+    return render_template('movie_list.html', movies=movies)
+
+
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
