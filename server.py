@@ -116,11 +116,19 @@ def rate_movie():
     """Add rating to ratings table."""
 
     user_id = session['user_id']
+    user = User.query.get(user_id)
     score = request.form.get("movie_rating")
     movie_id = request.form.get("movie_id")
+    movie = Movie.query.get(movie_id)
 
-    rating_record = Rating(movie_id=movie_id, user_id=user_id, score=score)
-    db.session.add(rating_record)
+    if movie not in user.movies:
+        rating = Rating(movie_id=movie_id, user_id=user_id, score=score)
+    else:
+        rating = db.session.query(Rating) \
+            .filter(Rating.movie_id==movie_id, Rating.user_id==user_id).one()
+        rating.score = score
+
+    db.session.add(rating)
     db.session.commit()
 
     flash('Rated successfully!')
