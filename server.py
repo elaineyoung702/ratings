@@ -100,15 +100,26 @@ def show_movie_list():
 
 @app.route('/movies/<movie_id>')
 def show_movie_page(movie_id):
-    """Show user's page."""
+    """Show movie page."""
 
     movie = Movie.query.get(movie_id)
     user = None
+    prediction = None
 
+    rating_scores = [r.score for r in movie.ratings]
+    avg_rating = float(sum(rating_scores)) / len(rating_scores)
+
+    # run this for logged in users
     if 'user_id' in session:
         user = User.query.get(session['user_id'])
 
-    return render_template('movie_page.html', movie=movie, user=user)
+        # if user hasn't rated movie, predict their rating
+        if movie not in user.movies:
+            prediction = user.predict_rating(movie)
+
+
+    return render_template('movie_page.html', movie=movie, user=user, 
+                            prediction=prediction, avg_rating=avg_rating)
 
 
 @app.route('/rate-movie', methods=['POST'])

@@ -21,11 +21,16 @@ Release Date: {{movie.released_at.strftime('%Y-%m-%d')}}<br>
         <input type="hidden" name="movie_id" value={{movie.movie_id}}>
         <input type="submit">
     </form>
+    <br><br>
+    {% if prediction %}
+        We predict you will rate this movie {{ prediction | int }}.
+    {% endif %}
 {% endif %}
 
 <br>
 <br>
-Ratings:
+Ratings:<br>
+Average Rating = {{ avg_rating | int }}
 <ul>
     {% for rating in movie.ratings %}
         <li>User {{rating.user.user_id}}: Score of {{rating.score}}/5
