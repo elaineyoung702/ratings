@@ -7,7 +7,8 @@ Release Date: {{movie.released_at.strftime('%Y-%m-%d')}}<br>
 <a href="{{movie.imdb_url}}">IMDB Link</a><br>
 <br>
 <!-- Work in progress to check if user has rated movie yet -->
-<!-- {% if 'user_email' in session %} -->
+{% if 'user_email' in session %}
+    {% if movie not in user.movies %}
     <form action="/rate-movie" method="POST">
         <label>Rate this film out of 5:
             <select name="movie_rating">
@@ -21,7 +22,8 @@ Release Date: {{movie.released_at.strftime('%Y-%m-%d')}}<br>
         <input type="hidden" name="movie_id" value={{movie.movie_id}}>
         <input type="submit">
     </form>
-<!-- {% endif %} -->
+    {% endif %}
+{% endif %}
 
 <br>
 <br>

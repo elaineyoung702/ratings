@@ -23,6 +23,8 @@ class User(db.Model):
     age = db.Column(db.Integer, nullable=True)
     zipcode = db.Column(db.String(15), nullable=True)
 
+    movies = db.relationship("Movie", secondary="ratings", backref="users")
+
     def __repr__(self):
         """Show details about user."""
         return f"<User user_id={self.user_id} email={self.email}>"
@@ -42,7 +44,7 @@ class Movie(db.Model):
     def __repr__(self):
         """Provide info about movie."""
 
-        return f"""<Movie movie_id={movie_id} title={title}>"""
+        return f"""<Movie movie_id={self.movie_id} title={self.title}>"""
 
 
 class Rating(db.Model):

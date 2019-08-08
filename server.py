@@ -103,8 +103,12 @@ def show_movie_page(movie_id):
     """Show user's page."""
 
     movie = Movie.query.get(movie_id)
+    user = None
 
-    return render_template('movie_page.html', movie=movie)
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+
+    return render_template('movie_page.html', movie=movie, user=user)
 
 
 @app.route('/rate-movie', methods=['POST'])
@@ -120,6 +124,8 @@ def rate_movie():
     db.session.commit()
 
     flash('Rated successfully!')
+
+    return redirect(f'/movies/{movie_id}')
 
 
 if __name__ == "__main__":
