@@ -27,11 +27,12 @@ class User(db.Model):
 
     def __repr__(self):
         """Show details about user."""
+        
         return f"<User user_id={self.user_id} email={self.email}>"
 
 
 class Movie(db.Model):
-    """Movie on movies website."""
+    """Movie on ratings website."""
 
     __tablename__ = "movies"
 
@@ -48,7 +49,7 @@ class Movie(db.Model):
 
 
 class Rating(db.Model):
-    """Rating on rating website"""
+    """Rating on ratings website"""
 
     __tablename__ = "ratings"
 

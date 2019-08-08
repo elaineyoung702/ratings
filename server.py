@@ -82,16 +82,16 @@ def register_process():
     
 @app.route('/logout')
 def log_out():
-    # session.clear()
-    del session['user_email']
-    del session['user_password']
-    del session['user_id']
+    """Removing user session data at logout."""
+    
+    session.clear()
 
     return redirect("/")
 
 
 @app.route('/movies')
 def show_movie_list():
+    """Display list of movies."""
 
     movies = Movie.query.all()
 
@@ -121,8 +121,10 @@ def rate_movie():
     movie_id = request.form.get("movie_id")
     movie = Movie.query.get(movie_id)
 
+    # if user has not rated movie, create new rating
     if movie not in user.movies:
         rating = Rating(movie_id=movie_id, user_id=user_id, score=score)
+    # if user has rated movie, update old rating
     else:
         rating = db.session.query(Rating) \
             .filter(Rating.movie_id==movie_id, Rating.user_id==user_id).one()
